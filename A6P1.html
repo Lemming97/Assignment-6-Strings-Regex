@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>A6P1 by Lindsey Martin</title>
+    <style>
+        #pricingTable {
+            border: 2px #666 solid;
+            border-collapse: collapse;
+        }
+
+        #pricingTable th {
+            font-weight: bold;
+            text-align: right;
+            padding: 5px;
+            border-right: 1px #BBB solid;
+        }
+
+        #pricingTable td {
+            text-align: right;
+            padding: 5px;
+            border-right: 1px #BBB solid;
+        }
+
+        #pricingTable tr:nth-child(odd) {
+            background-color: #DDD
+        }
+
+        #checkResults {
+            color: red;
+            font-weight: bold;
+        }
+
+    </style>
+    <script>
+        //prices
+        const PRICE1 = 40.00;
+        const PRICE2 = 50.00;
+        //array
+        var quantities = [10, 50, 100, 200, 500, 1000];
+        var disPrices = [0.05, 0.07, 0.10, 0.12, 0.15, 0.20];
+
+
+        function calculateDiscount(quat, disQuant, disPrent) {
+            // this if statement is checking the edge cases at the ends of the array. Smaller than these quatiteis or larger then these quanitites 
+            if ((quat >= 0) && (quat < disQuant[0])) {
+                return 0;
+            } else if (quat >= disQuant[disQuant.length - 1]) {
+                return 0.20;
+            }
+            // this for loop checks the inbetween indexes of the array 
+            for (var i = 0; i < disQuant.length - 1; i++) {
+
+                if (quat >= disQuant[i] && quat < disQuant[i + 1]) {
+                    return disPrent[i];
+                }
+
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>A6P1 Lindsey's Flower Shop</h1>
+    <p>Welcome to Lindsey's Flower Shop, where you can find any flower arrangement you like.</p>
+    <p>This months specials:</p>
+    <form>
+        <table border="1" cellspacing="0" cellpadding="6" summary="Table of product images, prices & descriptions">
+            <tbody>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>Please enter your name:<br><input type="text" id="txtName" name="txtName">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="text-align: center"><img src="https://sf.tac-cdn.net/images/products/large/FTD-C13-5036.jpg?auto=webp&quality=80" alt="flower set 1" height="250" width="250"></td>
+
+
+                    <td>
+                        <p class="product"><b>Pink Rose White Lily Bouquet</b></p>
+                        <p style="font-weight: bold">$<script>
+                                document.write(PRICE1.toFixed(2));
+
+                            </script>
+                        </p>
+                        <p>This elegant white lily flower bouquet is a classic way to show someone you care with an affordable gift. The beauty of this freshly cut flowers centerpiece will add serenity to your home. Hand-delivered from a local florist, this arrangement features light-pink rose, chrysanthemum, statice, and lily blooms. This luxury white lilies bouquet features pops of color with whisper soft pink carnation blossoms and rose selections</p>
+                    </td>
+                    <td>Quantity:<br><input type="text" class="required" id="txtQ1" name="txtQ1"></td>
+                </tr>
+
+                <tr>
+                    <td style="text-align: center"><img src="https://sf.tac-cdn.net/images/products/large/SF-200.jpg?auto=webp&quality=80" alt="flower set 2" height="250" width="250"></td>
+
+
+                    <td>
+                        <p class="product"><b>Sunflower Mason Jar Bouquet</b></p>
+                        <p style="font-weight: bold">$<script>
+                                document.write(PRICE2.toFixed(2));
+
+                            </script>
+                        </p>
+                        <p>Feel as if you're walking through a field of sunflower blooms and more. These inexpensive mixed flowers bouquet will evoke sunshine that will brighten up any home or office or someone special and deserving! Warm fall hues, seasonal and fresh cut alstroemeria mix with colorful pom blossoms for a hand delivered farm inspired flower arrangement that's certain to make one smile. Both affordable and touching, it feels as though the countryside comes indoors with this display. The jar can be used afterwards for whatever your recipient wants! </p>
+                    </td>
+                    <td>Quantity:<br><input type="text" class="required" id="txtQ2" name="txtQ2"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Radio Buttons for the shipping information  -->
+
+        <form name="Ship" onSubmit="return validate()">
+
+            <h3>Payment Info</h3>
+
+
+
+            <table id="pricingTable">
+                <thead>
+                    <tr>
+                        <th>Please choose a Shipping option:</th>
+                </thead>
+                <tbody>
+                    <p>
+                        <tr>
+                            <th> <input type="radio" name="Shipping" id="free" value="0.00">
+                                <label for="free">No Shipping (Free)</label> &nbsp; &nbsp;
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th><br><input type="radio" name="Shipping" id="Standard" value="2.00">
+                                <label for="Standard">Standard Shipping($2)</label> &nbsp; &nbsp;
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th><br><input type="radio" name="Shipping" id="2day" value="5.00">
+                                <label for="2day">2-Day Shipping ($5)</label> &nbsp; &nbsp;
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th><br><input type="radio" name="Shipping" id="overnight" value="10.00">
+                                <label for="overnight">Overnight Shipping ($10)</label>
+                            </th>
+                        </tr>
+
+                    </p>
+
+                <tbody>
+            </table>
+
+            <p>
+                <!-- not sure if I need this or not yet -->
+                <input type="button" value="Select Shipping" onclick="shippingButtons();">
+            </p>
+
+        </form>
+
+        <!-- Process Order Function and buttons -->
+
+        <p>
+            <input type="button" value="Process Order" id="btnProcess" onclick="checkInputs();" ;><span id="checkResults"></span>
+        </p>
+        <p><input type="button" value="Sample Weekly Payments" id="btnProcess2"></p>
+    </form>
+    <div id="receipt">&nbsp;
+    </div>
+    <div id="samples">&nbsp;</div>
+
+    <script>
+        //Checking inputs and making sure the fields are not empty 
+
+        function checkInputs() {
+            console.log('checkInput Function');
+            // Search thru product array for a match with customer's entry.
+            // If found, show price.  If not found indicate that to user.
+            // Return true if found, false if not.
+            var i = 0
+            var incompleteForm = false;
+            var requiredFields = document.getElementsByClassName('required');
+            console.log(requiredFields);
+            while (i < requiredFields.length) {
+                if (requiredFields[i].value == "") {
+                    requiredFields[i].value = "REQUIRED";
+                    incompleteForm = true;
+                    console.log(document.getElementById('checkResults'));
+                }
+                i++;
+            }
+            if (incompleteForm == false) {
+                return processOrder();
+
+            } else {
+
+                document.getElementById('checkResults').innerHTML = "<br><br>Order could not be completed as processed. Please fill in the Required Fields.";
+            }
+        }
+
+        function shippingButtons() {
+            var buttons = document.getElementsByName('Shipping');
+            console.log("Shipping Functions");
+            var noneChosen = true;
+            var strChoice;
+            for (var i = 0; i < buttons.length; i++) {
+                if (buttons[i].checked) {
+                    noneChosen = false;
+                    strChoice = buttons[i].value;
+                }
+            }
+            if (noneChosen) {
+                alert("Please choose a shipping type!");
+            } else {
+                alert("You chose $" + strChoice + "!");
+            }
+            return strChoice;
+
+        }
+
+
+        //Function to process the entire order 
+        function processOrder() {
+            console.log("processOrder Funtion");
+            var i = 0;
+            var cusName = document.getElementById('txtName').value;
+            var quantity1 = document.getElementById('txtQ1').value;
+            var quantity2 = document.getElementById('txtQ2').value;
+            var disCount2 = calculateDiscount(quantity1, quantities, disPrices);
+
+
+            var cost1 = PRICE1 * quantity1;
+            var cost2 = quantity2 * PRICE2;
+            var cost3 = cost1 - ((cost1) * disCount2);
+            var subTotal1 = cost1 + cost2;
+            var subTotal2 = cost3 + cost2;
+
+            //shipping buttons
+            var shippingCosts = shippingButtons();
+
+
+            //tax
+            var salesTax = .08;
+            var salesTaxTotal1 = (cost1 + cost2) * .08;
+            var salesTaxTotal2 = (cost3 + cost2) * .08;
+            var grandTotal1 = (cost1 + cost2) * (1 + salesTax) + parseFloat(shippingCosts);
+            var grandTotal2 = (cost3 + cost2) * (1 + salesTax) + parseFloat(shippingCosts);
+
+
+
+
+
+            //display to user
+            var strHtml1;
+            var strHtml2;
+            var strHtml3;
+            var strHtml4;
+            var strHtml5;
+            var strHtml6;
+            var strHtml7;
+
+
+            strHtml1 = "<p>Thank you for your order" + " " + cusName + "! You selected " + quantity1 + " Pink Rose White Lily Bouquets, and " + quantity2 + " Sunflower Mason Jar Bouquets.</p>";
+
+
+            if ((quantity1 >= 1) && (quantity1 <= 9)) {
+                strHtml2 = "<p>" + quantity1 + " Pink Rose White Lily Bouquets at $" + PRICE1 + " each = $" + cost1 + ".</p>";
+                console.log("First If statement");
+
+                strHtml3 = "<p>" + quantity2 + " Sunflower Mason Jar Bouquets at $" + PRICE2 + " each = $" + cost2 + ".</p>";
+                strHtml4 = "<p>Subtotal = $" + subTotal1.toFixed(2) + ".</p>";
+                strHtml5 = "<p>Sales tax = $" + salesTaxTotal1.toFixed(2) + ".</p>";
+                strHtml6 = "<p>Shipping Costs = $" + shippingCosts + ".</p>";
+                strHtml7 = "<p>Total Balance = $" + grandTotal1.toFixed(2) + ".</p>";
+            } else if (quantity1 >= 10) {
+                console.log("else if statement");
+                strHtml2 = "<p>" + quantity1 + " Pink Rose White Lily Bouquets at $" + PRICE1 + " with a discount of " + parseInt(disCount2 * 100) + "% with a total of $" + cost3.toFixed(2) + ".</p>";
+
+
+
+                strHtml3 = "<p>" + quantity2 + " Sunflower Mason Jar Bouquets at $" + PRICE2 + " each = $" + cost2 + ".</p>";
+                strHtml4 = "<p>Subtotal = $" + subTotal2.toFixed(2) + ".</p>";
+                strHtml5 = "<p>Sales tax = $" + salesTaxTotal2.toFixed(2) + ".</p>";
+                strHtml6 = "<p>Shipping Costs = $" + shippingCosts + ".</p>";
+                strHtml7 = "<p>Total Balance = $" + grandTotal2.toFixed(2) + ".</p>";
+
+            }
+
+
+            document.getElementById('receipt').innerHTML = strHtml1 + strHtml2 + strHtml3 + strHtml4 + strHtml5 + strHtml6 + strHtml7;
+            document.getElementById('checkResults').innerHTML = "";
+
+        }
+
+
+
+        // function for the sample payments 
+
+        function samplePayments() {
+            console.log("samplePayments Function");
+            var quantity;
+            var norPrice;
+            var discPrice;
+            var strHTML = "<h2>Display Quantity Pricing</h2>";
+            strHTML += "<table id ='pricingTable'><thead><tr><th>Quantity</th><th>Normal Price</th><th>Discount Price</th><th>Total Discounts</th></thead><tbody>";
+
+
+            //for loop
+            for (var i = 0; i < quantities.length; i++) {
+                norPrice = quantities[i] * PRICE1;
+                discPrice = norPrice - (norPrice * disPrices[i]);
+                strHTML += "<tr><td>" + quantities[i] + "</td><td>$" + norPrice.toFixed(2) + "</td><td>$" + discPrice.toFixed(2) + "</td>" + "<td>" + parseInt(disPrices[i] * 100) + "%</td></tr>"
+
+                console.log(typeof disPrices[i].toFixed(2));
+            }
+            strHTML += "</tbody></table>"
+            document.getElementById('samples').innerHTML = strHTML;
+
+
+
+        }
+
+
+        // Event Listener
+        //const buttonTest2 = document.getElementById('btnProcess').addEventListener('click', processOrder);
+        const buttonTest3 = document.getElementById('btnProcess2').addEventListener('click', samplePayments);
+
+        //Date
+        var datToday = new Date();
+        var strDate = datToday.getMonth() + 1 + "/" + datToday.getDate() + "/" + datToday.getFullYear();
+        document.write("<br>The current date is: ", strDate);
+
+    </script>
+</body>
+
+</html>
